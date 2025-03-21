@@ -38,39 +38,58 @@ namespace race {
         return RaceType(choice);
     }
 
-    void Game::registration() {
-        switch (raceType) {
-        case RaceType::AIR:
-            std::cout << "Гонка для воздушного транспорта. ";
-            break;
-        case RaceType::GROUND:
-            std::cout << "Гонка для наземного транспорта. ";
-            break;
-        case RaceType::BOTH:
-            std::cout << "Гонка для наземного и воздушного транспорта. ";
-            break;
+    void Game::printRegVehicles(std::vector<Vehicle*>& vehicles) {
+        bool is_first{ true };
+        for (auto& v : vehicles) {
+            if (is_first) {
+                std::cout << v->getName();
+                is_first = false;
+            }
+            else std::cout << ", " << v->getName();
         }
-        std::cout << "Расстояние: " << distance << std::endl;
+        std::cout << std::endl;
+    }
 
-        std::cout << "Регистрация (минимум 2 участника):" << std::endl;
-        std::cout << "1. Ботинки-вездеходы" << std::endl;
-        std::cout << "2. Верблюд" << std::endl;
-        std::cout << "3. Верблюд-скороход" << std::endl;
-        std::cout << "4. Кентавр" << std::endl;
-        std::cout << "5. Метла" << std::endl;
-        std::cout << "6. Орёл" << std::endl;
-        std::cout << "7. Ковёр-самолёт" << std::endl;
-        std::cout << "0. Закончить регистрацию" << std::endl;
+    bool Game::isRegistered(std::vector<Vehicle*>& vehicles, std::string name) {
+        for (auto& v : vehicles) {
+            if (v->getName() == name) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    void Game::registration() {
         int choice_num{ -1 };
         while (vehicles.size() < 2 || choice_num != 0) {
+            switch (raceType) {
+            case RaceType::AIR:
+                std::cout << "Гонка для воздушного транспорта. ";
+                break;
+            case RaceType::GROUND:
+                std::cout << "Гонка для наземного транспорта. ";
+                break;
+            case RaceType::BOTH:
+                std::cout << "Гонка для наземного и воздушного транспорта. ";
+                break;
+            }
+            std::cout << "Расстояние: " << distance << std::endl;
+
             if (!vehicles.empty()) {
                 int line{ 1 };
-                std::cout << "Зарегистрированные транспортные средства:" << std::endl;
-                for (auto& v : vehicles) {
-                    std::cout << line++ << ". " << v->getName() << std::endl;
-                }
+                std::cout << "Зарегистрированные транспортные средства: ";
+                printRegVehicles(vehicles);
             }
+
+            std::cout << "Регистрация (минимум 2 участника):" << std::endl;
+            std::cout << "1. Ботинки-вездеходы" << std::endl;
+            std::cout << "2. Верблюд" << std::endl;
+            std::cout << "3. Верблюд-скороход" << std::endl;
+            std::cout << "4. Кентавр" << std::endl;
+            std::cout << "5. Метла" << std::endl;
+            std::cout << "6. Орёл" << std::endl;
+            std::cout << "7. Ковёр-самолёт" << std::endl;
+            std::cout << "0. Закончить регистрацию" << std::endl;
 
             std::cout << "Выберите транспорт или 0 для окончания процесса регистрации: ";
             std::cin >> choice_num;
@@ -93,32 +112,67 @@ namespace race {
 
             switch (choice) {
             case r::BOOTS:
-                vehicles.insert(new AllTerrainBoots());
-                std::cout << "Ботинки-вездеходы успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Ботинки-вездеходы")) {
+                    vehicles.push_back(new AllTerrainBoots());
+                    std::cout << "Ботинки-вездеходы успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Ботинки - вездеходы уже зарегистрирован!" << std::endl;
+                }
                 break;
             case r::CAMEL:
-                vehicles.insert(new Camel());
-                std::cout << "Верблюд успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Верблюд")) {
+                    vehicles.push_back(new Camel());
+                    std::cout << "Верблюд успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Верблюд уже зарегистрирован!" << std::endl;
+                }
                 break;
             case r::CAMEL_RUNNER:
-                vehicles.insert(new CamelRunner());
-                std::cout << "Верблюд-быстроход успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Верблюд-быстроход")) {
+                    vehicles.push_back(new CamelRunner());
+                    std::cout << "Верблюд-быстроход успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Верблюд-быстроход уже зарегистрирован!" << std::endl;
+                }
                 break;
             case r::CENTAUR:
-                vehicles.insert(new Centaur());
-                std::cout << "Кентавр успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Кентавр")) {
+                    vehicles.push_back(new Centaur());
+                    std::cout << "Кентавр успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Кентавр уже зарегистрирован!" << std::endl;
+                }
                 break;
             case r::BROOM:
-                vehicles.insert(new Broom());
-                std::cout << "Метла успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Метла")) {
+                    vehicles.push_back(new Broom());
+                    std::cout << "Метла успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Метла уже зарегистрирован!" << std::endl;
+                }
                 break;
             case r::EAGLE:
-                vehicles.insert(new Eagle());
-                std::cout << "Орёл успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Орёл")) {
+                    vehicles.push_back(new Eagle());
+                    std::cout << "Орёл успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Орёл уже зарегистрирован!" << std::endl;
+                }
                 break;
             case r::CARPET:
-                vehicles.insert(new MagicCarpet());
-                std::cout << "Ковёр-самолёт успешно зарегистрирован!" << std::endl;
+                if (!isRegistered(vehicles, "Ковёр-самолёт")) {
+                    vehicles.push_back(new MagicCarpet());
+                    std::cout << "Ковёр-самолёт успешно зарегистрирован!" << std::endl;
+                }
+                else {
+                    std::cout << "Ковёр-самолёт уже зарегистрирован!" << std::endl;
+                }
                 break;
             }
         }

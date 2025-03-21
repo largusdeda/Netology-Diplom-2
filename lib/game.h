@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <vector>
 #include "vehicle.h"
 #include "ground_vehicle.h"
 #include "air_vehicle.h"
@@ -37,7 +38,7 @@ namespace race {
 
         RaceType raceType{};
         double distance{};
-        std::set<Vehicle*> vehicles;
+        std::vector<Vehicle*> vehicles;
 
     public:
         GameStatus play();
@@ -47,6 +48,8 @@ namespace race {
         double inputDistance();
         RaceType chooseRaceType();
         void registration();
+        void printRegVehicles(std::vector<Vehicle*> &vehicles);
+        bool isRegistered(std::vector<Vehicle*>& vehicles, std::string name);
         Results execRace();
         void showResults(Results results);
         void cleanRegistrationList();
